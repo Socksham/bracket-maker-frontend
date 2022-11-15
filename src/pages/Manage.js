@@ -23,9 +23,6 @@ const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
     const [team2, setTeam2] = useState(seed.teams[1]?.name);
 
     const updateBracket = () => {
-        rounds[roundIndex].seeds[seedIndex].teams[0].name = team1
-        rounds[roundIndex].seeds[seedIndex].teams[1].name = team2
-        //call database and set stuff
         var roundsString = JSON.stringify(rounds)
         console.log(roundsString)
     }
@@ -58,7 +55,7 @@ const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
                 </div>
             </SeedItem>
             <div className="cursor-pointer w-full text-center py-1 bg-slate-900 text-white" onClick={updateBracket}>
-                <p>Submit</p>
+                <p>Save</p>
             </div>
         </Wrapper>
     );
@@ -162,106 +159,6 @@ function Manage() {
             ],
         },
     ]);
-
-
-
-    const rounds1 = [
-        {
-            title: "Round of 16",
-            seeds: [
-                {
-                    id: 1,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "England" }, { name: "America" }],
-                },
-                {
-                    id: 2,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Mexico" }, { name: "India" }],
-                },
-                {
-                    id: 3,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Germany" }, { name: "France" }],
-                },
-                {
-                    id: 4,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Guatemala" }, { name: "South Korea" }],
-                },
-                {
-                    id: 5,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "West Indies" }, { name: "Qatar" }],
-                },
-                {
-                    id: 6,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "South Africa" }, { name: "West Africa" }],
-                },
-                {
-                    id: 7,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Netherlands" }, { name: "Antarctica" }],
-                },
-                {
-                    id: 8,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "New Zealand" }, { name: "Australia" }],
-                },
-            ],
-        },
-        {
-            title: "Round of 8",
-            seeds: [
-                {
-                    id: 9,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "England" }, { name: "India" }],
-                },
-                {
-                    id: 10,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "France" }, { name: "South Korea" }],
-                },
-                {
-                    id: 11,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Qatar" }, { name: "South Africa" }],
-                },
-                {
-                    id: 12,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Netherlands" }, { name: "Australia" }],
-                },
-            ],
-        },
-        {
-            title: "Final 4",
-            seeds: [
-                {
-                    id: 13,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "India" }, { name: "America" }],
-                },
-                {
-                    id: 14,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "Qatar" }, { name: "Netherlands" }],
-                },
-            ],
-        },
-        {
-            title: "Championship",
-            seeds: [
-                {
-                    id: 15,
-                    date: new Date().toDateString(),
-                    teams: [{ name: "India" }, { name: "Qatar" }],
-                },
-            ],
-        },
-    ];
 
     useEffect(() => {
         //TODO: call the mongo database, get the bracket string, convert to json, parse json
