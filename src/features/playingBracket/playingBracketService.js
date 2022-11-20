@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://127.0.0.1:5500/api/playing-brackets'
+const API_URL = 'http://127.0.0.1:5500/api/playing-brackets/'
 
 // Create new goal
 const createPlayingBracket = async (bracketData, token) => {
@@ -16,15 +16,28 @@ const createPlayingBracket = async (bracketData, token) => {
 }
 
 // Get user goals
-const getPlayingBracket = async (bracketId, token) => {
+const getPlayingBracket = async (bracketData, token) => {
+  console.log("SERVICE TOKEN: " + token)
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
 
-  const response = await axios.get(API_URL + bracketId, config)
+  const response = await axios.get(API_URL + bracketData.bracketId, config)
 
+  return response.data
+}
+
+const updatePlayingBracket = async(bracketData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  
+  const response = await axios.put(API_URL + bracketData.bracketId, bracketData, config)
+  
   return response.data
 }
 

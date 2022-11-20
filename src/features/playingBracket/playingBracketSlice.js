@@ -4,6 +4,8 @@ import playingBracketService from './playingBracketService'
 const initialState = {
   playingBrackets: [],
   playingBracket: "",
+  localPlayingBracket: {},
+  isPlayingLocked: false,
   isPlayingError: false,
   isPlayingSuccess: false,
   isPlayingLoading: false,
@@ -11,7 +13,7 @@ const initialState = {
 }
 
 export const createPlayingBracket = createAsyncThunk(
-  'bracket/create',
+  'playing-bracket/create',
   async (bracketData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
@@ -31,11 +33,12 @@ export const createPlayingBracket = createAsyncThunk(
 )
 
 export const getPlayingBracket = createAsyncThunk(
-  'bracket/get',
-  async (_, thunkAPI) => {
+  'playing-bracket/get',
+  async (bracketData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await playingBracketService.getPlayingBracket(token)
+      console.log("token " + token)
+      return await playingBracketService.getPlayingBracket(bracketData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -48,12 +51,34 @@ export const getPlayingBracket = createAsyncThunk(
   }
 )
 
+export const updatePlayingBracket = createAsyncThunk(
+  'playing-bracket/update',
+  async (bracketData, thunkAPI) => {
+      try {
+          const token = thunkAPI.getState().auth.user.token
+          // const brackets = await playingBracketService.getPlayingBrackets(bracketData, token)
+          // console.log(brackets)
+          const response = await playingBracketService.updatePlayingBracket(bracketData, token)
+          return response
+      } catch (error) {
+          const message =
+              (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+              error.message ||
+              error.toString()
+          return thunkAPI.rejectWithValue(message)
+      }
+  }
+)
 export const getPlayingBrackets = createAsyncThunk(
-  'bracket/getAll',
+  'playing-bracket/getAll',
   async (_, thunkAPI) => {
       try {
           const token = thunkAPI.getState().auth.user.token
-          return await playingBracketService.getPlayingBrackets(token)
+          const brackets = await playingBracketService.getPlayingBrackets(token)
+          console.log(brackets)
+          return brackets
       } catch (error) {
           const message =
               (error.response &&
@@ -67,7 +92,7 @@ export const getPlayingBrackets = createAsyncThunk(
 )
 
 export const deletePlayingBracket = createAsyncThunk(
-  'bracket/delete',
+  'playing-bracket/delete',
   async (id, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
@@ -88,7 +113,8 @@ export const playingBracketSlice = createSlice({
   name: 'playingBracket',
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    playingReset: (state) => initialState,
+    updateLocalPlayingBracket: (state, action) => {state.localPlayingBracket = action.payload}
   },
   extraReducers: (builder) => {
     builder
@@ -111,7 +137,10 @@ export const playingBracketSlice = createSlice({
       .addCase(getPlayingBracket.fulfilled, (state, action) => {
         state.isPlayingLoading = false
         state.isPlayingSuccess = true
-        state.playingBracket = action.payload
+        state.playingBracket = action.payload.bracket
+        console.log("PAYLOAD: ")
+        console.log(action.payload)
+        state.localPlayingBracket = JSON.parse(action.payload.bracket)
       })
       .addCase(getPlayingBracket.rejected, (state, action) => {
         state.isPlayingLoading = false
@@ -129,7 +158,7 @@ export const playingBracketSlice = createSlice({
       .addCase(getPlayingBrackets.rejected, (state, action) => {
         state.isPlayingLoading = false
         state.isPlayingError = true
-        state.message = action.payload
+        state.playingMessage = action.payload
       })
       .addCase(deletePlayingBracket.pending, (state) => {
         state.isPlayingLoading = true
@@ -149,5 +178,5 @@ export const playingBracketSlice = createSlice({
   },
 })
 
-export const { playingReset } = playingBracketSlice.actions
+export const { playingReset, updateLocalPlayingBracket } = playingBracketSlice.actions
 export default playingBracketSlice.reducer

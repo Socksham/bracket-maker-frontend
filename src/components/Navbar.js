@@ -18,14 +18,14 @@ const Navbar = () => {
                         <div>
                             <p className="sm:text-3xl font-bold text-black">Bracket Maker</p>
                         </div>
-                        <div className='flex items-center'>
+                        {/* <div className='flex items-center'>
                             <div className='flex space-x-16 text-lg items-center justify-end'>
                                 <p><a href='/'>Home</a></p>
                                 <p><a href='/mentors'>Mentors</a></p>
                                 <p><a href='/programs'>Programs</a></p>
                                 <p><a href='/scrapbook'>Scrapbook</a></p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="flex lg:hidden mb-1 cursor-pointer">
@@ -46,11 +46,6 @@ const Navbar = () => {
                                         <a className="flex justify-end py-3 px-0 block border-b-2 hover:border-indigo-400 space-x-1" href="/">
                                             Home
                                         </a>
-                                        <a className="flex justify-end py-3 px-0 block border-b-2 hover:border-indigo-400" href="/mentors">Mentors</a>
-                                        <a className="flex justify-end py-3 px-0 block border-b-2 hover:border-indigo-400" href="/programs">
-                                            Programs</a>
-                                        <a className="flex justify-end py-3 px-0 block border-b-2 hover:border-indigo-400" href="/scrapbook">
-                                            Scrapbook</a>
                                     </ul>
                                 </nav>
                             </div>

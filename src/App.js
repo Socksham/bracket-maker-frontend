@@ -4,7 +4,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Manage from './pages/Manage'
+import Managing from './pages/Managing'
+import Playing from './pages/Playing'
 import Navbar from './components/Navbar'
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
                         <Route path='/' element={<Dashboard />} />
                         <Route path='/login' element={<Login />} />
                         <Route path='/register' element={<Register />} />
-                        <Route path='/manage' element={<Manage />} />
+                        <Route path='/managing/:bracketId' element={<Managing />} />
+                        <Route path='/playing/:bracketId' element={<Playing />} />
                     </Routes>
                 </div>
             </Router>
