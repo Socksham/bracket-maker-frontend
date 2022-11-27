@@ -4,6 +4,8 @@ const API_URL = 'http://127.0.0.1:5500/api/playing-brackets/'
 
 // Create new goal
 const createPlayingBracket = async (bracketData, token) => {
+  const token = thunkAPI.getState().auth.user.token
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -11,8 +13,9 @@ const createPlayingBracket = async (bracketData, token) => {
   }
 
   const response = await axios.post(API_URL, bracketData, config)
-
-  return response.data
+  const data = await response.data
+  
+  return data
 }
 
 // Get user goals

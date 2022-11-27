@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import ManagingBracketService from './managingBracketService'
 
+import axios from 'axios'
+
+const API_URL = 'http://127.0.0.1:5500/api/managing-brackets'
+
 const initialState = {
   managingBrackets: [],
   managingBracket: "",
@@ -16,9 +20,18 @@ export const createManagingBracket = createAsyncThunk(
   async (bracketData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await ManagingBracketService.createManagingBracket(bracketData, token)
 
-      // return bracketData.joinCode
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const response = await axios.post(API_URL, bracketData, config)
+      const data = await response.data
+      
+      return data
+
     } catch (error) {
       const message =
         (error.response &&
@@ -101,7 +114,11 @@ export const ManagingBracketSlice = createSlice({
       .addCase(createManagingBracket.fulfilled, (state, action) => {
         state.isManagingLoading = false
         state.isManagingSuccess = true
-        state.managingBrackets.push(action.payload)
+        console.log(action.payload)
+        if(action.payload !== undefined){
+          console.log(action.payload)
+          state.managingBrackets.push(action.payload)
+        }
       })
       .addCase(createManagingBracket.rejected, (state, action) => {
         state.isManagingLoading = false

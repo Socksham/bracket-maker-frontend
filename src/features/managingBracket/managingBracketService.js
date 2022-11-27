@@ -10,9 +10,29 @@ const createManagingBracket = async (bracketData, token) => {
     },
   }
 
-  const response = await axios.post(API_URL, bracketData, config)
+  // axios.post(API_URL, bracketData, config).then((response) => {
+  //   console.log("DATA")
+  //   console.log(response.data)
+  //   return response.data
+  // })
 
-  return response.data
+  return await (await axios.post(API_URL, bracketData, config)).data
+
+  // let promises = [];
+
+  // try {
+  //   promise = response.data = axios.post(API_URL, bracketData, config)
+    
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  // return Promise
+  //   .all(promises)
+  //   .then(results =>
+  //     results.map(response => response.data[0])
+  //   )
+
 }
 
 // Get user goals
@@ -25,7 +45,7 @@ const getManagingBracket = async (bracketId, token) => {
 
   const response = await axios.get(API_URL + bracketId, config)
 
-  return response.data
+  return await response.data
 }
 
 const getManagingBrackets = async (token) => {
@@ -37,7 +57,7 @@ const getManagingBrackets = async (token) => {
 
   const response = await axios.get(API_URL, config)
 
-  return response.data
+  return await response.data
 }
 
 // Delete user goal
