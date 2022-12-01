@@ -165,7 +165,7 @@ function Playing() {
                 {
                     id: 12,
                     date: new Date().toDateString(),
-                    teams: [{ name: "Netherlands" }, { name: "Australia" }],
+                    teams: [{ name: "Netherlands" }, { name: "Antarctica" }],
                 },
             ],
         },
@@ -175,7 +175,7 @@ function Playing() {
                 {
                     id: 13,
                     date: new Date().toDateString(),
-                    teams: [{ name: "India" }, { name: "America" }],
+                    teams: [{ name: "India" }, { name: "France" }],
                 },
                 {
                     id: 14,

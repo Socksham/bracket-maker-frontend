@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Managing from './pages/Managing'
 import Playing from './pages/Playing'
 import Navbar from './components/Navbar'
+import Home from './pages/Home'
 
 function App() {
     return (
@@ -15,7 +16,8 @@ function App() {
                 <div className='mx-56'>
                     <Navbar />
                     <Routes>
-                        <Route path='/' element={<Dashboard />} />
+                        <Route path='/' element={<Home />} />
+                        <Route path='/dashboard' element={<Dashboard />} />
                         <Route path='/login' element={<Login />} />
                         <Route path='/register' element={<Register />} />
                         <Route path='/managing/:bracketId' element={<Managing />} />

@@ -1,10 +1,10 @@
 import axios from 'axios'
-
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 const API_URL = 'http://127.0.0.1:5500/api/playing-brackets/'
 
 // Create new goal
 const createPlayingBracket = async (bracketData, token) => {
-  const token = thunkAPI.getState().auth.user.token
+  // const token = thunkAPI.getState().auth.user.token
 
   const config = {
     headers: {
@@ -73,7 +73,8 @@ const playingBracketService = {
   getPlayingBracket,
   createPlayingBracket,
   deletePlayingBracket,
-  getPlayingBrackets
+  getPlayingBrackets,
+  updatePlayingBracket
 }
 
 export default playingBracketService
