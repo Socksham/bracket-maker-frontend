@@ -63,7 +63,7 @@ export const localManagingBracketSlice = createSlice({
           {
             id: 9,
             date: new Date().toDateString(),
-            teams: [{ name: "America" }, { name: "India" }],
+            teams: [{ name: "England" }, { name: "India" }],
             winner: 1,
           },
           {
