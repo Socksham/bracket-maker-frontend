@@ -8,29 +8,58 @@ import {
   RenderSeedProps,
 } from "react-brackets";
 
-import { useEffect, useState } from "react";
+import {
+  getManagingBracket,
+  updateManagingBracket,
+} from "../features/managingBracket/managingBracketService.js";
+
+import { useEffect, useState, useReducer } from "react";
 import { FaTrophy } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
+  const isLineConnector =
+    rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
+
+  const Wrapper = isLineConnector ? SingleLineSeed : Seed;
 
   const [team1, setTeam1] = useState(seed.teams[0]?.name);
   const [team2, setTeam2] = useState(seed.teams[1]?.name);
   const [winner, setWinner] = useState(-1);
+
   const nextRoundIndex = roundIndex + 1;
-  const nextRoundSeedIndex = Math.floor(seedIndex/2);
+  const nextRoundSeedIndex = Math.floor(seedIndex / 2);
   const nextRoundSeedTeamIndex = seedIndex % 2;
-  console.log(roundIndex, seedIndex, rounds[roundIndex].seeds[seedIndex].teams, nextRoundSeedIndex, nextRoundSeedTeamIndex);
+  const [winnerTeamName, setWinnerTeamName] = useState("");
+  //   console.log(
+  //     roundIndex,
+  //     seedIndex,
+  //     rounds[roundIndex].seeds[seedIndex].teams,
+  //     nextRoundSeedIndex,
+  //     nextRoundSeedTeamIndex
+  //   );
+
+  const dispatch = useDispatch();
 
   const updateBracket = () => {
-    var roundsString = JSON.stringify(rounds);
-    console.log(roundsString);
+    console.log(roundIndex, seedIndex % 2);
+    var tempRounds = JSON.parse(JSON.stringify(rounds));
+    tempRounds[roundIndex].seeds[seedIndex].teams[seedIndex % 2].name = team1;
+    tempRounds[roundIndex].seeds[seedIndex].teams[seedIndex % 2].name = team2;
+    tempRounds[nextRoundIndex].seeds[nextRoundSeedIndex].teams[
+      nextRoundSeedTeamIndex
+    ] = winnerTeamName;
+    // var roundsString = JSON.stringify(tempRounds)
+    // console.log(roundsString)
+    dispatch(updateManagingBracket(tempRounds));
   };
 
   // mobileBreakpoint is required to be passed down to a seed
   return (
-    <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
+    <Wrapper mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
       <SeedItem>
-        <div>
+        <div className="p-1">
           <SeedTeam>
             <div className="flex justify-between">
               <input
@@ -46,8 +75,10 @@ const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
                     setWinner(-1);
                   } else {
                     setWinner(0);
-                    if(roundIndex < rounds.length - 1) {
-                      rounds[nextRoundIndex].seeds[nextRoundSeedIndex].teams[nextRoundSeedTeamIndex] = {name: team1};
+                    if (roundIndex < rounds.length - 1) {
+                      rounds[nextRoundIndex].seeds[nextRoundSeedIndex].teams[
+                        nextRoundSeedTeamIndex
+                      ] = { name: team1 };
                     }
                   }
                   updateBracket();
@@ -72,8 +103,10 @@ const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
                     setWinner(-1);
                   } else {
                     setWinner(1);
-                    if(roundIndex < rounds.length - 1) {
-                      rounds[nextRoundIndex].seeds[nextRoundSeedIndex].teams[nextRoundSeedTeamIndex] = {name: team2};
+                    if (roundIndex < rounds.length - 1) {
+                      rounds[nextRoundIndex].seeds[nextRoundSeedIndex].teams[
+                        nextRoundSeedTeamIndex
+                      ] = { name: team2 };
                     }
                   }
                   updateBracket();
@@ -85,13 +118,7 @@ const CustomSeed = ({ seed, breakpoint, roundIndex, seedIndex, rounds }) => {
           </SeedTeam>
         </div>
       </SeedItem>
-      <div
-        className="cursor-pointer w-full text-center py-1 bg-slate-900 text-white"
-        onClick={updateBracket}
-      >
-        <p>Save</p>
-      </div>
-    </Seed>
+    </Wrapper>
   );
 };
 
@@ -194,8 +221,23 @@ function Managing() {
     },
   ]);
 
+  let { bracketId } = useParams();
+
+  const [outOfDate, setOutOfDate] = useState(false);
+
   useEffect(() => {
     //TODO: call the mongo database, get the bracket string, convert to json, parse json
+
+    // Call local storage and see if there's a value we can compare to
+
+    const currentLocalStorage = JSON.parse(
+      localStorage.getItem(`world_cup_bracket_${bracketId}`)
+    );
+    if (currentLocalStorage === null) {
+      // Get default/bracketID bracket from MongoDB and continue to load
+    } else {
+      setRounds(currentLocalStorage);
+    }
   }, []);
 
   return <Bracket rounds={rounds} renderSeedComponent={CustomSeed} />;
